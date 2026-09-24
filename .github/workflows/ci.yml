@@ -29,20 +29,24 @@ jobs:
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: .cache/sudachi
-          key: sudachidict-core-${{ env.SUDACHI_DICT_VERSION }}
+          key: sudachidict-core-${{ env.SUDACHI_DICT_VERSION }}-v2
 
+      # 辞書は外部の配布サーバーではなく、このリポジトリの Release に再配布したものを使う。
       - name: Download Sudachi dictionary
         if: steps.dict-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p .cache/sudachi
-          curl -fsSL -o .cache/sudachi/dict.zip \
-            "https://d2ej7fkh96fzlu.cloudfront.net/sudachidict/sudachi-dictionary-${SUDACHI_DICT_VERSION}-core.zip"
+          gh release download "sudachidict-core-${SUDACHI_DICT_VERSION}" \
+            --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --output .cache/sudachi/dict.zip
           echo "${SUDACHI_DICT_SHA256}  .cache/sudachi/dict.zip" | sha256sum -c -
           unzip -o -j .cache/sudachi/dict.zip '*.dic' -d .cache/sudachi
-          rm .cache/sudachi/dict.zip
 
-      - name: Export dictionary path
-        run: echo "SUDACHIN_DICT=$GITHUB_WORKSPACE/.cache/sudachi/system_core.dic" >> "$GITHUB_ENV"
+      - name: Export dictionary paths
+        run: |
+          echo "SUDACHIN_DICT=$GITHUB_WORKSPACE/.cache/sudachi/system_core.dic" >> "$GITHUB_ENV"
+          echo "NJ_DICT_ARCHIVE=$GITHUB_WORKSPACE/.cache/sudachi/dict.zip" >> "$GITHUB_ENV"
 
       - name: gofmt
         run: |
