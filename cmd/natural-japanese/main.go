@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/ZONO33LHD/japanese-translation-go/infrastructure/dictstore"
 	"github.com/ZONO33LHD/japanese-translation-go/infrastructure/embedding"
 	"github.com/ZONO33LHD/japanese-translation-go/infrastructure/filesystem"
 	"github.com/ZONO33LHD/japanese-translation-go/infrastructure/sudachi"
@@ -25,10 +26,15 @@ func main() {
 }
 
 func newApp() *cli.App {
+	var dict cli.DictionaryStore
+	if s, err := dictstore.Default(); err == nil {
+		dict = s
+	}
 	return &cli.App{
+		Dictionary:     dict,
 		Reader:         filesystem.SourceReader{},
 		BaselineReader: filesystem.SourceReader{MaxBytes: filesystem.BaselineMaxBytes},
-		OpenTokenizer:  openTokenizer,
+		OpenTokenizer:  func(p string) (port.Tokenizer, func() error, error) { return openTokenizer(p, dict) },
 		NewEmbedder:    newEmbedder,
 		NewCorpusLoader: func(dir string) port.CorpusLoader {
 			return filesystem.CorpusLoader{Dir: dir}
@@ -38,10 +44,14 @@ func newApp() *cli.App {
 	}
 }
 
-func openTokenizer(dictPath string) (port.Tokenizer, func() error, error) {
+// openTokenizer は --dict、$SUDACHIN_DICT、dict install で取得した既定の場所の順に辞書を探す。
+func openTokenizer(dictPath string, dict cli.DictionaryStore) (port.Tokenizer, func() error, error) {
 	path, err := sudachi.ResolveDictPath(dictPath)
+	if err != nil && dict != nil && dict.Installed() {
+		path, err = dict.Path(), nil
+	}
 	if err != nil {
-		return nil, nil, fmt.Errorf("エラー: 辞書が指定されていません（--dict か $%s でシステム辞書のパスを渡してください）", sudachi.DictEnv)
+		return nil, nil, fmt.Errorf("エラー: 辞書が見つかりません。natural-japanese dict install で取得するか、--dict か $%s でシステム辞書のパスを渡してください", sudachi.DictEnv)
 	}
 	tk, err := sudachi.Open(path)
 	if err != nil {

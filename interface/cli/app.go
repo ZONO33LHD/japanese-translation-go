@@ -47,8 +47,17 @@ type App struct {
 	NewEmbedder    EmbedderFactory
 	// NewCorpusLoader はコーパスのディレクトリから CorpusLoader を作る（calibrate 用）。
 	NewCorpusLoader func(dir string) port.CorpusLoader
-	Stdout          io.Writer
-	Stderr          io.Writer
+	// Dictionary は dict サブコマンドが扱う辞書の置き場所。
+	Dictionary DictionaryStore
+	Stdout     io.Writer
+	Stderr     io.Writer
+}
+
+// DictionaryStore は既定の場所への辞書の取得を担う。
+type DictionaryStore interface {
+	Path() string
+	Installed() bool
+	Install(ctx context.Context) (string, error)
 }
 
 type command struct {
@@ -64,6 +73,7 @@ func (app *App) commands() []command {
 		{"terms", "専門用語候補を初出順に抽出する", runTerms},
 		{"semantic", "文埋め込みで話題の平板さを検出する（EXPERIMENTAL）", runSemantic},
 		{"calibrate", "コーパスで検出器の閾値を校正する（開発者向け）", runCalibrate},
+		{"dict", "形態素解析の辞書（SudachiDict core）を取得する・場所を表示する", runDict},
 	}
 }
 
