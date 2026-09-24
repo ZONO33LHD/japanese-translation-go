@@ -75,7 +75,7 @@ argument-hint: "[write|score] [quick|full|exp] [対象ファイルや依頼内�
 natural-japanese lint --json <file>
 ```
 
-`natural-japanese` は `go install github.com/ZONO33LHD/japanese-translation-go/cmd/natural-japanese@latest` で入る Go 製 CLI。形態素解析は [sudachin-go](https://github.com/ZONO33LHD/sudachin-go)（sudachi.rs と出力互換）で行うため、SudachiDict core のシステム辞書（[配布 zip](https://d2ej7fkh96fzlu.cloudfront.net/sudachidict/sudachi-dictionary-20260723-core.zip) に入っている `system_core.dic`。回帰テストはこの版で確認している）を `--dict` か環境変数 `$SUDACHIN_DICT` で渡す。
+`natural-japanese` は `go install github.com/ZONO33LHD/japanese-translation-go/cmd/natural-japanese@latest` で入る Go 製 CLI。形態素解析は [sudachin-go](https://github.com/ZONO33LHD/sudachin-go)（sudachi.rs と出力互換）で行うため、SudachiDict core（20260723 版。回帰テストはこの版で確認している）が要る。初回に `natural-japanese dict install` で取得すれば以後は自動で使われる。手元の辞書を使うときは `--dict` か環境変数 `$SUDACHIN_DICT` で渡す。
 
 禁止語・翻訳調・否定肯定対比の反復・文長の均質さ・体言止め率・段落頭の接続詞率・語彙多様性・英語統語の疑いなどを機械的に検出する。検出結果は件数に関わらず exit code 0（lint なので、件数で CI を止めることはしない）。入力エラーのときだけ exit code 1。
 

@@ -16,18 +16,18 @@ go install github.com/ZONO33LHD/japanese-translation-go/cmd/natural-japanese@lat
 
 ### 辞書の用意
 
-形態素解析には [sudachin-go](https://github.com/ZONO33LHD/sudachin-go)（sudachi.rs と出力互換の Go 実装）を使います。SudachiDict core のシステム辞書を取得してください。
+形態素解析には [sudachin-go](https://github.com/ZONO33LHD/sudachin-go)（sudachi.rs と出力互換の Go 実装）を使います。辞書は次のコマンドで取得します。
 
 ```sh
-curl -LO https://d2ej7fkh96fzlu.cloudfront.net/sudachidict/sudachi-dictionary-20260723-core.zip
-echo "b6e835f63440f97474c2da45d80950f73746e632e40bbfc168b4041729135e1f  sudachi-dictionary-20260723-core.zip" | shasum -a 256 -c -
-unzip -j sudachi-dictionary-20260723-core.zip '*.dic'
-export SUDACHIN_DICT=$PWD/system_core.dic
+natural-japanese dict install   # 約 72 MB。ユーザーのキャッシュディレクトリに置く
+natural-japanese dict path      # 置き場所を表示する
 ```
 
-検出件数の回帰テストはこの版（20260723）で確認しています。別の版でも動きますが、形態素の切り方が変わると検出結果も変わることがあります。
+取得するのは Works Applications の [SudachiDict](https://github.com/WorksApplications/SudachiDict) core（20260723 版、Apache License 2.0）です。公式配布の zip を改変せずに[このリポジトリの Release](https://github.com/ZONO33LHD/japanese-translation-go/releases/tag/sudachidict-core-20260723) へ再配布しており、固定の SHA-256 と照合してから展開します。ライセンス表示（`LICENSE-2.0.txt`・`LEGAL`）も辞書と同じ場所に置きます。
 
-辞書のパスは各サブコマンドの `--dict` でも渡せます。`--dict` が優先で、未指定なら `$SUDACHIN_DICT` を読みます。
+検出件数の回帰テストはこの版で確認しています。別の版でも動きますが、形態素の切り方が変わると検出結果も変わることがあります。
+
+辞書は `--dict`、`$SUDACHIN_DICT`、`dict install` で取得した場所の順に探します。手元の辞書を使うときは前の 2 つで指定してください。
 
 ## 使い方
 

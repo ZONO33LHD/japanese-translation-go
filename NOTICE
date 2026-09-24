@@ -14,5 +14,9 @@ licensed under the MIT License.
 - testdata/fixtures/ is copied from the original repository.
 
 Morphological analysis uses sudachin-go (https://github.com/ZONO33LHD/sudachin-go)
-with the SudachiDict system dictionary, which is distributed separately under its
-own license (Apache License 2.0) and is not included in this repository.
+with the SudachiDict system dictionary by Works Applications
+(https://github.com/WorksApplications/SudachiDict). The unmodified official archive is
+redistributed as a GitHub Release asset of this repository and fetched by
+`natural-japanese dict install`; it is not part of the source tree. The dictionary is
+licensed under the Apache License 2.0 and contains data derived from UniDic
+(BSD 3-Clause); see LICENSE-2.0.txt and LEGAL inside the archive.
