@@ -1,0 +1,22 @@
+japanese-translation-go
+Copyright (c) 2026 ZONO33LHD
+
+This project is a Go port of natural-japanese
+(https://github.com/coji/natural-japanese), Copyright (c) 2026 coji,
+licensed under the MIT License.
+
+- skills/natural-japanese/ (SKILL.md, references/, assets/) is derived from the
+  original repository's skill documents. Script invocations were rewritten to
+  use the Go CLI (natural-japanese); the writing guidance itself is unchanged.
+- The detector logic, thresholds, catalogs and messages in usecase/ are ported
+  from the original Python scripts (lint.py, textcore.py, outline.py, terms.py,
+  semantic.py, calibrate.py).
+- testdata/fixtures/ is copied from the original repository.
+
+Morphological analysis uses sudachin-go (https://github.com/ZONO33LHD/sudachin-go)
+with the SudachiDict system dictionary by Works Applications
+(https://github.com/WorksApplications/SudachiDict). The unmodified official archive is
+redistributed as a GitHub Release asset of this repository and fetched by
+`natural-japanese dict install`; it is not part of the source tree. The dictionary is
+licensed under the Apache License 2.0 and contains data derived from UniDic
+(BSD 3-Clause); see LICENSE-2.0.txt and LEGAL inside the archive.

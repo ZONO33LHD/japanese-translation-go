@@ -1,0 +1,4 @@
+github.com/ZONO33LHD/sudachin-go v0.0.0-20260924031217-8bfb9c0ab16c h1:YW46EkJ0onyXLtFECxNGztB3MZp9l08rjKXGZdCc5iM=
+github.com/ZONO33LHD/sudachin-go v0.0.0-20260924031217-8bfb9c0ab16c/go.mod h1:PSsJkyu8jb/9+sDn1fZVHsXeY5/YW5qQiGnhFqOAIS8=
+golang.org/x/text v0.42.0 h1:JbOZXgfeCPU9gacVtYliJqOhD+zhrEqK4LfdpmlUZqI=
+golang.org/x/text v0.42.0/go.mod h1:ojzP1Z+2QtioaF8DTtO8K5q7JWVVYwZKenzujK0Zd0E=

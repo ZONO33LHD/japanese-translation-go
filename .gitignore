@@ -1,0 +1,6 @@
+/natural-japanese
+/bin/
+*.dic
+coverage.out
+.cache/
+corpus/reports/
